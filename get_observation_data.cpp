@@ -18,6 +18,7 @@
 
 void get_observation_data(
     double ***intensity,
+    double **sigma,
     double **latlon,
     char **argv
     ){
@@ -32,6 +33,13 @@ void get_observation_data(
 //    std::ifstream ifs( ("data/h08_b0" + std::to_string(j_lambda+1) + "_s01s02_20160709_210000.txt").c_str() );
     std::ifstream ifs( (obs_data_dir + "/h08_b0" + std::to_string(j_lambda+1) +
         "_s01s02_20" + YYMMDD + "_" + hhmm + "00.txt").c_str() );
+    if ( !ifs ){
+      std::cout << "File: \""
+          << obs_data_dir + "/h08_b0" + std::to_string(j_lambda+1) +
+          "_s01s02_20" + YYMMDD + "_" + hhmm + "00.txt\" does not exist." << std::endl;
+      exit(-1);
+    }
+
     std::getline(ifs, line); /* 1行目はただ height */
     std::getline(ifs, line); /* 2行目は lat lon 0 〜 100 */
 
@@ -49,6 +57,32 @@ void get_observation_data(
     }
     ifs.close();
   }
+
+  /* 標準偏差 */
+
+  int j_lambda = 0;
+  std::string line_sigma;
+  std::ifstream ifs_sigma( (obs_data_dir + "/sigma_b0" + std::to_string(j_lambda+1) +
+      "_s01s02_20" + YYMMDD + "_" + hhmm + "00.txt").c_str() );
+
+  if ( !ifs_sigma ){
+    std::cout << "File: \""
+        << obs_data_dir + "/sigma_b0" + std::to_string(j_lambda+1) +
+        "_s01s02_20" + YYMMDD + "_" + hhmm + "00.txt\" does not exist."
+        << std::endl;
+    exit(-1);
+  }
+
+  std::getline(ifs_sigma, line_sigma); /* 1行目はただ height */
+  std::getline(ifs_sigma, line_sigma); /* 2行目は lat lon 0 〜 100 */
+  for(int i_alpha = 0; i_alpha < Num_observed_data_latitude; i_alpha++){
+    std::getline(ifs_sigma, line_sigma); /* 3行目以降は lat lon 0 〜 100の標準偏差 */
+    AndoLab::Command cmd_sigma(line_sigma, ' ');
+    for(int k = 0; k < Num_observed_data_altitude; k++){
+      sigma[i_alpha][k] = cmd_sigma.get_d(Offset_for_not_altitude_data + k);
+    }
+  }
+  ifs_sigma.close();
 
 
 }

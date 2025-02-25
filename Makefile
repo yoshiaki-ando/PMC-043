@@ -6,7 +6,7 @@ OBJS = Across_pts.o Geocoordinate.o across_point_atmosphere.o beta.o \
 	main.o obtainfittingcoefficient.o obtainfittingpmc.o \
 	optical_depth.o \
 	pmc.o search_pmc_region.o select_latlon.o solar_direction.o \
-	tangential_point.o this_position_is_near_pmc.o
+	tangential_point.o this_position_is_near_pmc.o does_pmc_exist.o
 
 LIBS = -L/home/ando/lib -Wl,-rpath /home/ando/lib -lnlopt -lMie_scattering -lcomplex_bessel -lnrlmsise21 -lAndoLab_20
 INCS = -I/home/ando/include
@@ -37,3 +37,4 @@ optical_depth.o main.o solar_direction.o pmc.o: pmc.h
 select_latlon.o get_observation_data.o obtainfittingcoefficient.o main.o: pmc_observation.h
 
 tangential_point.o convert_coordinate.o intensity_integra.o optical_depth.o cross_point_at_altitude.o beta.o across_point_atmosphere.o obtainfittingcoefficient.o obtainfittingpmc.o calculate_intensity.o get_arg.o this_position_is_near_pmc.o main.o search_pmc_region.o: pmc_simulation.h
+

@@ -30,7 +30,10 @@ constexpr double Lambda[Num_Lambda] { 470e-9, 510e-9, 640e-9 }; /* 470nm, 510nm,
 
 constexpr double Lower_PMC { 78.0e3 };
 constexpr double Upper_PMC { 88.0e3 };
-constexpr int Num_PMC_Layer { 11 };
+constexpr double DAlt { 1.0e3 };
+constexpr int idx_LowerPMC { int(Lower_PMC/DAlt) };
+constexpr int idx_UpperPMC { int(Upper_PMC/DAlt) };
+constexpr int Num_PMC_Layer { idx_UpperPMC - idx_LowerPMC + 1 };
 
 constexpr double Altitude_of_Atmosphere { 100.e3 };
 

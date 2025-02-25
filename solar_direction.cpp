@@ -54,11 +54,11 @@ AndoLab::Vector3d <double> r_s(Date d){ /* Date d はUTで与えられる */
   - 0.1229*sin(w*J) - 0.1565*sin(2*w*J) - 0.0041*sin(3*w*J); /* 均時差[h] */
   const double t = (15.0*(Ts + (lon - 135.0)/15.0 + e) - 180.0) *Deg2rad; /* 時角[rad] */
   const double h = asin(sin(lat*Deg2rad)*sin(delta) + cos(lat*Deg2rad)*cos(delta)*cos(t)); /* 太陽高度角[rad] */
-  double th_h = M_PI/2.0 - h;//太陽天頂角[rad]
+  double th_h = M_PI/2.0 - h; /* [rad] : 太陽天頂角 */
 
   const double sinA = cos(delta) * sin(t) / cos(h);
   const double cosA = (sin(h) * sin(lat*Deg2rad) - sin(delta)) / (cos(h)*cos(lat*Deg2rad));
-  double A = atan2(sinA,cosA);//方位角、南=0、西=90
+  double A = atan2(sinA,cosA); /* 方位角、南=0、西=90 */
   // if(A > 2.0*M_PI){
   //   A = A - 2.0*M_PI;
   // }

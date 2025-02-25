@@ -10,14 +10,14 @@
 
 #include <string>
 
-constexpr int Num_observed_data_altitude { 101 };  /* 高度方向のデータ数 */
-constexpr int Num_observed_data_latitude { 44*2 }; /* 緯度のデータ数 */
+constexpr int Num_observed_data_altitude { 101 };  /* 高度方向のデータ数 0-100km */
+constexpr int Num_observed_data_latitude { 44*2 }; /* 緯度のデータ数 38°- 81°× 2 */
 
 constexpr double Altitude_observed_min { 0.0 };     /* 観測データの最低高度 */
 constexpr double Altitude_observed_max { 100.0e3 }; /* 観測データの最高高度 */
 constexpr double DAltitude_observed { 1.0e3 };      /* 観測データの高度刻み */
 
-constexpr int Idx_background { 90 }; /* 背景光強度を求める最低高度のインデックス */
+constexpr int Idx_background { 91 }; /* 背景光強度を求める最低高度のインデックス = (高度km) + 1  */
 
 extern std::string obs_data_dir;
 
@@ -26,6 +26,7 @@ extern std::string obs_data_dir;
  */
 void get_observation_data(
     double ***intensity,
+    double **sigma,
     double **latlon,
     char **argv
     );
@@ -42,6 +43,17 @@ void ObtainFittingCoefficient(
     double ***Observed_data,    /* 観測データ */
     double *SolarRayIntensity,  /* 係数 = 太陽光の強さ */
     double *BackgroundIntensity /* オフセット = 背景光の明るさ */
+    );
+
+/* Kawaura and Tsuda methodによるPMC存在の判定 */
+bool does_pmc_exist(
+    const int idx_alpha,
+    double ***Observed_Average,
+    double **Observed_SD,
+    double **Simulated_Rayleigh,    /* 観測データ */
+    double *SolarRayIntensity,  /* 係数 = 太陽光の強さ */
+    double *BackgroundIntensity, /* オフセット = 背景光の明るさ */
+    double &Altitude_of_Upper_Edge_of_PMC /* PMCがあると判定された最高高度 */
     );
 
 #endif /* PMC_OBSERVATION_H_ */
